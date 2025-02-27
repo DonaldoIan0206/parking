@@ -7,24 +7,23 @@ use Illuminate\Http\Request;
 
 class ParkingSpotController extends Controller
 {
-    // Obtener todas las coordenadas
-    public function index()
-    {
-        return response()->json(ParkingSpot::all());
-    }
-
-    // Guardar nuevas coordenadas
+    // 📌 Guardar coordenadas de un espacio de estacionamiento
     public function store(Request $request)
     {
         $spot = ParkingSpot::create($request->all());
         return response()->json($spot, 201);
     }
 
-    // Actualizar estado del espacio
-    public function update(Request $request, $id)
+    // 📌 Obtener todas las coordenadas guardadas
+    public function index()
     {
-        $spot = ParkingSpot::findOrFail($id);
-        $spot->update($request->all());
-        return response()->json($spot);
+        return response()->json(ParkingSpot::all());
+    }
+
+    // 📌 Eliminar una coordenada (por si el usuario borra un espacio)
+    public function destroy($id)
+    {
+        ParkingSpot::destroy($id);
+        return response()->json(["message" => "Espacio eliminado"], 200);
     }
 }
