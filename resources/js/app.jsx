@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import CanvasComponent from "./components/CanvasComponent";
 import ControlPanel from "./components/ControlPanel";
 import CoordinateList from "./components/CoordinateList";
-import '../css/app.css';  // O usa el nombre correcto de tu archivo CSS
+import "../css/app.css";  // Asegúrate de que la ruta sea correcta
 
 
 const App = () => {
-    const [image, setImage] = useState(null);
-    const [positions, setPositions] = useState([]);
-    const [tempPosition, setTempPosition] = useState(null);
-    const [rectWidth, setRectWidth] = useState(50);
-    const [rectHeight, setRectHeight] = useState(30);
+    const [image, setImage] = React.useState(null);
+    const [positions, setPositions] = React.useState([]);
+    const [tempPosition, setTempPosition] = React.useState(null);
+    const [rectWidth, setRectWidth] = React.useState(50);
+    const [rectHeight, setRectHeight] = React.useState(30);
 
     const confirmRectangle = () => {
         if (tempPosition) {
@@ -25,17 +25,73 @@ const App = () => {
     };
 
     return (
-        <div style={{ textAlign: "center", padding: "20px" }}>
-            <h1>Selecciona la Imagen y Marca los Espacios</h1>
-            <input type="file" accept="image/*" onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))} />
+        <div className="min-h-screen flex flex-col items-center justify-start bg-gray-100 p-12">
 
-            {image && <ControlPanel rectWidth={rectWidth} setRectWidth={setRectWidth} rectHeight={rectHeight} setRectHeight={setRectHeight} confirmRectangle={confirmRectangle} removeLastRectangle={removeLastRectangle} />}
+{/* 📌 Título con más margen arriba y abajo */}
+<h1 className="text-4xl font-extrabold text-gray-800 mt-16 mb-8 text-center">
+    🖼️ Selecciona una Imagen y Marca los Espacios 📍
+</h1>
 
-            {image && <CanvasComponent image={image} positions={positions} tempPosition={tempPosition} setTempPosition={setTempPosition} rectWidth={rectWidth} rectHeight={rectHeight} confirmRectangle={confirmRectangle} removeLastRectangle={removeLastRectangle} />}
 
-            <CoordinateList positions={positions} />
+            {/* 📂 Botón de elegir/cambiar imagen */}
+{/* 📂 Botón de elegir/cambiar imagen */}
+<div className="flex items-center gap-4 mt-4">
+    <label className="cursor-pointer bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 transition-all">
+        <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))}
+            className="hidden"
+        />
+        {image ? "🔄 Cambiar Imagen" : "📂 Elegir Imagen"}
+    </label>
+
+    {/* ❌ Botón de cancelar solo si hay una imagen cargada */}
+    {image && (
+        <button
+            onClick={() => setImage(null)}
+            className="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 transition-all"
+        >
+            ❌ Cancelar
+        </button>
+    )}
+</div>
+
+
+
+            {image && (
+                <>
+                    <div className="mt-6 relative">
+                        <CanvasComponent
+                            image={image}
+                            positions={positions}
+                            tempPosition={tempPosition}
+                            setTempPosition={setTempPosition}
+                            rectWidth={rectWidth}
+                            rectHeight={rectHeight}
+                        />
+                    </div>
+
+                    <ControlPanel
+                        rectWidth={rectWidth}
+                        setRectWidth={setRectWidth}
+                        rectHeight={rectHeight}
+                        setRectHeight={setRectHeight}
+                        confirmRectangle={confirmRectangle}
+                        removeLastRectangle={removeLastRectangle}
+                    />
+
+                    <CoordinateList positions={positions} />
+                </>
+            )}
         </div>
     );
 };
 
-ReactDOM.createRoot(document.getElementById("app")).render(<App />);
+// 📌 Exportación correcta
+export default App;
+
+// 📌 Renderizar correctamente en el DOM
+if (document.getElementById("app")) {
+    ReactDOM.createRoot(document.getElementById("app")).render(<App />);
+}
