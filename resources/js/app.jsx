@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import CanvasComponent from "./components/CanvasComponent";
 import ControlPanel from "./components/ControlPanel";
 import CoordinateList from "./components/CoordinateList";
+import '../css/app.css';  // O usa el nombre correcto de tu archivo CSS
+
 
 const App = () => {
     const [image, setImage] = useState(null);
